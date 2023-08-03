@@ -185,6 +185,7 @@ WHERE HIRE_DATE BETWEEN '1990-01-01' AND '1999-12-31';
 -- '_____' : 다섯글자 문자열
 
 -- EMPLOYEE 테이블에서 성이 '전'씨인 사원의 사번, 이름 조회
+-- 이름이 꼭 3글자가 아닐 수 있으므로 '전__' 보다는 '전%' 사용하기!
 
 SELECT EMP_ID, EMP_NAME
 FROM EMPLOYEE
