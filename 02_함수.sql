@@ -118,10 +118,4 @@ SELECT TRUNC(123.456) FROM DUAL; -- 123, 소수점 아래를 버림
 SELECT TRUNC(123.456, 1) FROM DUAL; -- 123.4, 소수점 첫째자리 아래버림
 
 
-
-
-
-
-
-
-
+-- Github TEST !
