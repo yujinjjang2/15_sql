@@ -34,7 +34,7 @@ SELECT EMP_NAME + 10 FROM EMPLOYEE;
 -- 산술연산은 숫자(NUMBER 타입)만 가능하다!
 
 
-SELECT EMP_ID + 10 FROM EMPLOYEE;
+SELECT EMP_ID, EMP_ID + 10 FROM EMPLOYEE;
 
 
 SELECT '같음'
@@ -56,7 +56,7 @@ SELECT SYSDATE FROM DUAL;
 
 
 -- 날짜 + 산술연산 (+ , -)
-SELECT SYSDATE -1, SYSDATE, SYSDATE + 1
+SELECT SYSDATE - 1, SYSDATE, SYSDATE + 1
 FROM DUAL;
 -- 날짜에 +/- 연산 시 일 단위로 계산이 진행됨
 
@@ -91,7 +91,7 @@ SELECT EMP_NAME, SALARY, '원 입니다' FROM EMPLOYEE;
 -- 주의사항 1) DISTINCT 구문은 SELECT 마다 딱 한번씩만 작성 가능
 -- 주의사항 2) DISTINCT 구문은 SELECT 제일 앞에 작성되어야 한다.
 
-
+SELECT DEPT_CODE, JOB_CODE FROM EMPLOYEE;
 SELECT DISTINCT DEPT_CODE, JOB_CODE FROM EMPLOYEE;
 
 ---------------------------------------------------------------------------
@@ -185,6 +185,7 @@ WHERE HIRE_DATE BETWEEN '1990-01-01' AND '1999-12-31';
 -- '_____' : 다섯글자 문자열
 
 -- EMPLOYEE 테이블에서 성이 '전'씨인 사원의 사번, 이름 조회
+-- 이름이 꼭 3글자가 아닐 수 있으므로 '전__' 보다는 '전%' 사용하기!
 
 SELECT EMP_ID, EMP_NAME
 FROM EMPLOYEE
@@ -342,16 +343,6 @@ ORDER BY 입사일;
 SELECT EMP_NAME, DEPT_CODE, SALARY
 FROM EMPLOYEE
 ORDER BY DEPT_CODE, SALARY DESC;
-
-
-
-
-
-
-
-
-
-
 
 
 

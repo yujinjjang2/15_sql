@@ -452,8 +452,3 @@ WHERE SUBSTR(EMP_NO, 8, 1) = '1';
 
 
 
-
-
-
-
-
