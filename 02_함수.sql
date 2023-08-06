@@ -14,6 +14,9 @@
 SELECT EMAIL, LENGTH(EMAIL)
 FROM EMPLOYEE;
 
+--SELECT LENGTH('이승준')
+--FROM DUAL;
+
 
 ---------------------------------------
 
@@ -50,6 +53,9 @@ FROM EMPLOYEE;
 SELECT EMP_NAME, SUBSTR(EMAIL, 1, INSTR(EMAIL, '@') - 1 ) 아이디
 FROM EMPLOYEE;
 
+--SELECT SUBSTR('동해물과 백두산이', 1, 6)
+--FROM DUAL;
+
 --------------------------------------------------------------------------
 
 -- TRIM( [ [옵션] '문자열' | 컬럼명 FROM ] '문자열' | 컬럼명 )
@@ -65,6 +71,8 @@ FROM DUAL; -- 양쪽 공백 제거
 SELECT TRIM(BOTH '#' FROM '#####안녕#####')
 FROM DUAL;
 
+--SELECT LPAD('AB', 7, '#'), RPAD('AB', 7, '#')
+--FROM DUAL;
 
 
 --------------------------------------------------------------------------
@@ -138,7 +146,7 @@ SELECT SYSTIMESTAMP FROM DUAL;
 
 
 -- MONTHS_BETWEEN(날짜, 날짜) : 두 날짜의 개월 수 차이 반환
-SELECT ABS( ROUND( MONTHS_BETWEEN(SYSDATE, '2023-12-22'), 3) ) "수강 기간(개월)"
+SELECT ABS( ROUND( MONTHS_BETWEEN(SYSDATE, TO_DATE('2023-12-22', 'YYYY-MM-DD')), 3) ) "수강 기간(개월)"
 FROM DUAL; -- 4.568
 
 
@@ -154,13 +162,13 @@ FROM EMPLOYEE;
 
 
 -- ADD_MONTHS(날짜, 숫자) : 날짜에 숫자만큼의 개월 수를 더함. (음수도 가능)
-SELECT ADD_MONTHS(SYSDATE, 4) FROM DUAL; -- 현재 날짜에서 4개월 뒤
+SELECT ADD_MONTHS(SYSDATE, 4), ADD_MONTHS(SYSDATE, -1) FROM DUAL; -- 현재 날짜에서 4개월 뒤
 SELECT ADD_MONTHS(SYSDATE, -1) FROM DUAL; -- 현재 날짜에서 1개월 전
 
 
 -- LAST_DAY(날짜) : 해당 달의 마지막 날짜를 구함
 SELECT LAST_DAY(SYSDATE) FROM DUAL; 
-SELECT LAST_DAY('2020-02-01') FROM DUAL;
+SELECT LAST_DAY(TO_DATE('2020-02-01', 'YYYY-MM-DD')) FROM DUAL;
 
 
 -- EXTRACT : 년, 월, 일 정보를 추출하여 리턴
@@ -200,7 +208,7 @@ SELECT TO_CHAR(1234, '99999') FROM DUAL; -- ' 1234'
 SELECT TO_CHAR(1234, '00000') FROM DUAL; -- '01234'
 SELECT TO_CHAR(1234) FROM DUAL; -- '1234' 
 
-SELECT TO_CHAR(1000000, '9,999,999') || '원' FROM DUAL;
+SELECT TO_CHAR(1000001999, 'FM9,999,999,999') || '원' FROM DUAL;
 
 SELECT TO_CHAR(1000000, 'L9,999,999') FROM DUAL; -- '\1,000,000'
 
@@ -237,8 +245,8 @@ SELECT TO_CHAR(SYSDATE, 'YYYY"년" MM"월" DD"일" (DY)') FROM DUAL;
 -- TO_DATE(숫자형 데이터, [포맷]) : 숫자형 데이터를 날짜로 변경
 --> 지정된 포맷으로 날짜를 인식함
 
-SELECT TO_DATE('2022-09-02') FROM DUAL; -- DATE 타입 변환
-SELECT TO_DATE(20230804) FROM DUAL;
+SELECT TO_DATE('2022-09-02', 'YYYY-MM-DD') FROM DUAL; -- DATE 타입 변환
+SELECT TO_DATE(20230804, 'YYYY-MM-DD') FROM DUAL;
 
 SELECT TO_DATE('230803 101835', 'YYMMDD HH24MISS') FROM DUAL;
 -- SQL Error [1861] [22008]: ORA-01861: 리터럴이 형식 문자열과 일치하지 않음
@@ -314,6 +322,11 @@ FROM EMPLOYEE;
 SELECT EMP_NAME, DECODE (SUBSTR(EMP_NO, 8, 1) , '1', '남성', '2', '여성') 성별
 FROM EMPLOYEE;
 
+--SELECT 
+--	EMP_NAME, 
+--	DECODE (DEPT_CODE , 'D9', '디구', 'D5', '디오', '해당없음')
+--FROM EMPLOYEE;
+
 
 -- 직원의 급여를 인상하고자 한다.
 -- 직급 코드가 J7인 직원은 20% 인상,
@@ -323,7 +336,7 @@ FROM EMPLOYEE;
 
 -- 내 풀이
 SELECT EMP_NAME, JOB_CODE, SALARY,
-	DECODE(JOB_CODE, 'J7', SALARY * 0.2, 'J6', SALARY * 0.15, 'J5', SALARY * 0.1, SALARY * 0.05) 인상급여
+	DECODE(JOB_CODE, 'J7', SALARY+(SALARY * 0.2), 'J6', SALARY * 0.15, 'J5', SALARY * 0.1, SALARY * 0.05) 인상급여
 FROM EMPLOYEE;
 
 -- 강사님 풀이
@@ -349,6 +362,16 @@ FROM EMPLOYEE;
 -- 비교하고자 하는 값 또는 컬럼이 조건식과 같으면 결과 값 반환
 -- 조건은 범위 값 가능
 
+SELECT 
+	EMP_NAME, 
+	DEPT_CODE,
+	DECODE (DEPT_CODE , 'D9', '디구', 'D5', '디오', '해당없음'),
+	CASE
+		WHEN DEPT_CODE = 'D9' THEN '디구'
+		WHEN DEPT_CODE = 'D5' THEN '디오'
+		ELSE '해당없음'
+	END	
+FROM EMPLOYEE;
 
 
 -- EMPLOYEE 테이블에서
@@ -356,14 +379,18 @@ FROM EMPLOYEE;
 -- 급여가 300만 이상 500만 미만이면 '중'
 -- 급여가 300만 미만 '소' 으로 조회
 
-SELECT EMP_NAME, SALARY,
-	CASE
-		WHEN SALARY >= 5000000 THEN '대' -- if
-		WHEN SALARY >= 3000000 THEN '중' -- else if
-		ELSE '소'
-	END "급여 받는 정도"
-FROM EMPLOYEE;
-
+SELECT 
+	EMP_NAME
+	, SALARY
+	, (
+		CASE
+			WHEN SALARY >= 5000000 THEN '대' -- if
+			WHEN SALARY >= 3000000 THEN '중' -- else if
+			ELSE '소'
+		END
+	)  "급여 받는 정도"
+FROM 
+	EMPLOYEE;
 -----------------------------------------------------------------------------------
 
 /* 그룹 함수 */
@@ -406,6 +433,16 @@ FROM EMPLOYEE
 WHERE SALARY = ( SELECT MAX(SALARY) FROM EMPLOYEE );
 				-- 서브쿼리 + 그룹함수
 
+-- EMPLOYEE 테이블에서 입사일자가 가장 빠른 가장오래 근무한사람을
+-- 이름, 급여, 직급 코드 조회
+
+SELECT EMP_NAME, SALARY, JOB_CODE
+FROM EMPLOYEE
+WHERE HIRE_DATE = ( SELECT MIN(HIRE_DATE) FROM EMPLOYEE );
+
+--SELECT dept_CODE, sum(SALARY)
+--FROM EMPLOYEE
+--GROUP BY dept_CODE;
 
 
 -- * COUNT(* | 컬럼명) : 행 개수를 헤아려서 리턴
@@ -415,6 +452,7 @@ WHERE SALARY = ( SELECT MAX(SALARY) FROM EMPLOYEE );
 
 -- EMPLOYEE 테이블의 행의 개수
 SELECT COUNT(*) FROM EMPLOYEE;
+SELECT COUNT(DEPT_CODE) FROM EMPLOYEE;
 
 -- BONUS를 받는 사원의 수
 
@@ -438,6 +476,15 @@ FROM EMPLOYEE;
 SELECT COUNT(*)
 FROM EMPLOYEE
 WHERE SUBSTR(EMP_NO, 8, 1) = '1'; 
+
+
+SELECT COUNT(*)
+FROM EMPLOYEE
+WHERE SALARY >= 3000000; 
+
+
+SELECT SUM(CASE WHEN SALARY >= 3000000 THEN '1' END)
+FROM EMPLOYEE;
 
 
 

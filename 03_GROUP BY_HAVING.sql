@@ -52,7 +52,21 @@ SELECT DECODE ( SUBSTR(EMP_NO, 8, 1), '1', '남', '2', '여' ) 성별,
 	SUM(SALARY) "급여 합"
 FROM EMPLOYEE
 GROUP BY DECODE ( SUBSTR(EMP_NO, 8, 1), '1', '남', '2', '여' ) -- 별칭 사용 X (SELECT절 해석 x)
-ORDER BY "인원 수 "; -- 별칭 사용 O (SELECT절 해석 완료)
+ORDER BY "인원 수"; -- 별칭 사용 O (SELECT절 해석 완료)
+
+--SELECT
+--    A.성별
+--	, COUNT(*) "인원 수"
+--	, SUM(SALARY) "급여 합"
+--FROM 
+--	(
+--		SELECT DECODE ( SUBSTR(EMP_NO, 8, 1), '1', '남', '2', '여' ) 성별, SALARY
+--		FROM EMPLOYEE
+--	) A 
+--GROUP BY
+--    A.성별
+
+
 
 
 --------------------------------------------------------------------------------------
@@ -83,6 +97,12 @@ GROUP BY DEPT_CODE;
 -- EMPLOYEE 테이블에서 직급별 2000년도 이후(2000년 포함) 입사자들의 급여합을 조회
 -- (직급코드 오름차순)
 
+SELECT JOB_CODE, SUM(SALARY)
+FROM EMPLOYEE
+WHERE TO_CHAR(HIRE_DATE, 'YYYY') >= '2000' 
+GROUP BY JOB_CODE
+ORDER BY JOB_CODE;
+
 -- 내 풀이
 SELECT JOB_CODE, SUM(SALARY)
 FROM EMPLOYEE
@@ -94,8 +114,8 @@ ORDER BY JOB_CODE;
 SELECT JOB_CODE, SUM(SALARY)
 FROM EMPLOYEE
 WHERE HIRE_DATE >= TO_DATE('2000-01-01')
-GROUP BY JOB CODE
-ORDER BY 1; -- 왜 오류..?
+GROUP BY JOB_CODE
+ORDER BY 1;
 
 
 -------------------------------------------------------------------------------------------------------
@@ -154,6 +174,7 @@ ORDER BY 1;
 
 SELECT DEPT_CODE, JOB_CODE, COUNT(*)
 FROM EMPLOYEE
+WHERE DEPT_CODE IS NOT NULL
 GROUP BY ROLLUP(DEPT_CODE, JOB_CODE)
 ORDER BY 1;
 
@@ -162,6 +183,7 @@ ORDER BY 1;
 
 SELECT DEPT_CODE, JOB_CODE, COUNT(*)
 FROM EMPLOYEE
+WHERE DEPT_CODE IS NOT NULL
 GROUP BY CUBE(DEPT_CODE, JOB_CODE)
 ORDER BY 1;
 
@@ -189,8 +211,8 @@ FROM EMPLOYEE
 WHERE DEPT_CODE = 'D5'
 --UNION
 --UNION ALL
---INTERSECT 
-MINUS
+INTERSECT 
+--MINUS
 -- 급여가 300만 초과인 사원의 사번, 이름, 부서코드, 급여 조회
 SELECT EMP_ID, EMP_NAME, DEPT_CODE, SALARY
 FROM EMPLOYEE

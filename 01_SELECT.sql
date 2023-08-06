@@ -52,11 +52,15 @@ SELECT EMP_NAME, HIRE_DATE, SYSDATE FROM EMPLOYEE;
 -- SYSDATE : 시스템상의 현재 시간(날짜)을 나타내는 상수
 
 SELECT SYSDATE FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'AM') || ' ' || TO_CHAR(SYSDATE, 'YYYY-MM-DD HH:MI:SS') FROM DUAL; 
 -- DUAL(DUmy tAbLe) 테이블 : 가짜 테이블(임시 조회용 테이블)
 
 
 -- 날짜 + 산술연산 (+ , -)
 SELECT SYSDATE - 1, SYSDATE, SYSDATE + 1
+FROM DUAL;
+SELECT 20230801 - 1
 FROM DUAL;
 -- 날짜에 +/- 연산 시 일 단위로 계산이 진행됨
 
@@ -93,6 +97,7 @@ SELECT EMP_NAME, SALARY, '원 입니다' FROM EMPLOYEE;
 
 SELECT DEPT_CODE, JOB_CODE FROM EMPLOYEE;
 SELECT DISTINCT DEPT_CODE, JOB_CODE FROM EMPLOYEE;
+SELECT DEPT_CODE, JOB_CODE FROM EMPLOYEE GROUP BY DEPT_CODE, JOB_CODE;
 
 ---------------------------------------------------------------------------
 
@@ -159,7 +164,7 @@ WHERE SALARY NOT BETWEEN 3000000 AND 6000000;
 
 SELECT EMP_NAME, HIRE_DATE
 FROM EMPLOYEE
-WHERE HIRE_DATE BETWEEN '1990-01-01' AND '1999-12-31';
+WHERE TO_CHAR(HIRE_DATE, 'YYYY-MM-DD') BETWEEN '1990-01-01' AND '1999-12-31';
 
 ---------------------------------------------------------------------------
 
@@ -177,6 +182,27 @@ WHERE HIRE_DATE BETWEEN '1990-01-01' AND '1999-12-31';
 -- 'A%' : A로 시작하는 문자열
 -- '%A' : A로 끝나는 문자열
 -- '%A%' : A를 포함하는 문자열
+
+--SELECT
+--	A.A앞
+--FROM 
+--	(
+--		SELECT 
+--			'ABC' A앞
+--		FROM 
+--			DUAL 
+--		UNION ALL 
+--		SELECT 
+--			'BAC' A앞
+--		FROM 
+--			DUAL 
+--		UNION ALL 
+--		SELECT 
+--			'BCA' A앞
+--		FROM 
+--			DUAL 
+--	) A
+--WHERE A.A앞 LIKE '%A%'
 
 -- '_' 예시
 -- 'A_' : A로 시작하는 두 글자 문자열
@@ -231,7 +257,7 @@ SELECT EMP_ID, EMP_NAME, EMAIL, DEPT_CODE, HIRE_DATE, SALARY
 FROM EMPLOYEE
 WHERE EMAIL LIKE '____#_%' ESCAPE '#'
 AND (DEPT_CODE = 'D9' OR DEPT_CODE = 'D6')
-AND HIRE_DATE BETWEEN '1990-01-01' AND '2000-12-31'
+AND TO_CHAR(HIRE_DATE, 'YYYY-MM-DD') BETWEEN '1990-01-01' AND '2000-12-31'
 AND SALARY > 2700000;
 
 -- 연산자 우선순위
