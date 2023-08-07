@@ -137,6 +137,36 @@ ORDER BY 1;
 
 -- 11. 학번이 A313047 인 학생이 학교에 나오고 있지 않다. 지도 교수에게 내용을 전달하기 위한 학과 이름, 학생 이름과 지도 교수 이름이 필요하다.
 --     이때 사용할 SQL 문을 작성하시오. 단, 출력헤더는 "학과이름", "학생이름", "지도교수이름" 으로 출력되도록 한다.
+SELECT 
+	B.DEPARTMENT_NAME 학과이름,
+	A.STUDENT_NAME 학생이름,
+	C.PROFESSOR_NAME 지도교수이름
+FROM 
+	TB_STUDENT A,
+	TB_DEPARTMENT B,
+	TB_PROFESSOR C
+WHERE 1 = 1
+  AND A.STUDENT_NO = 'A313047'
+  AND A.DEPARTMENT_NO = B.DEPARTMENT_NO
+  AND A.COACH_PROFESSOR_NO = C.PROFESSOR_NO;
+ 
+-- 12. 2007 년도에 '인간관계론' 과목을 수강한 학생을 찾아 학생이름과 수강학기를 표시하는 SQL 문장을 작성하시오.
+SELECT 
+	A.STUDENT_NAME,
+	B.TERM_NO "TERM_NAME"
+FROM
+	TB_STUDENT A,
+	TB_GRADE B,
+	TB_CLASS C
+WHERE 1 = 1
+  AND SUBSTR(TERM_NO, 1, 4) = '2007'
+  AND A.STUDENT_NO = B.STUDENT_NO
+  AND B.CLASS_NO = C.CLASS_NO
+  AND C.CLASS_NO = 'C2604100'
+ORDER BY 1;
+
+-- 13. 예체능 계열 과목 중 과목 담당교수를 한 명도 배정받지 못한 과목을 찾아 그 과목 이름과 학과 이름을 출력하는 SQL 문장을 작성하시오.
+
 
 
 
