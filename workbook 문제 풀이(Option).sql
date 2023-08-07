@@ -45,20 +45,20 @@ ORDER BY
 -- 5. 2004년 2 학기에 'C3118100' 과목을 수강한 학생들의 학점을 조회하려고 한다.
 --    학점이 높은 학생부터 표시하고, 학점이 같으면 학번이 낮은 학생부터 표시하는 구문을 작성해보시오.
 
--- 어째 하다보니 되었다????????????
-SELECT
+SELECT 
 	STUDENT_NO,
-	TO_CHAR(POINT, '0.00')
-FROM
+	TO_CHAR(POINT, '0.00') "POINT"
+FROM 
 	TB_GRADE
-WHERE TERM_NO = '200402'
+WHERE 1 = 1
+  AND TERM_NO = '200402'
   AND CLASS_NO = 'C3118100'
 ORDER BY
-	POINT DESC;
+	POINT DESC, STUDENT_NO;
 
 -- 6. 학생 번호, 학생 이름, 학과 이름을 학생 이름 오름차순 정렬하여 출력하는 SQL 문을 작성하시오.
 
--- 학생 이름 오름차순이라면서 결과가 왜저래????????
+-- 학생 이름 오름차순이라면서 결과 왜 서가람부터?
 SELECT 
 	A.STUDENT_NO,
 	A.STUDENT_NAME,
@@ -90,7 +90,7 @@ WHERE 1 = 1
  
 -- 8. 과목별 교수 이름을 찾으려고 한다. 과목 이름과 교수 이름을 출력하는 SQL 문을 작성하시오.
 
--- 뭔소리???? 
+-- 왜 TB_CLASS_PROFESSOR을 중간 매개역할 해야하는건가?
 SELECT 
 	A.CLASS_NAME,
 	B.PROFESSOR_NAME
@@ -166,15 +166,29 @@ WHERE 1 = 1
 ORDER BY 1;
 
 -- 13. 예체능 계열 과목 중 과목 담당교수를 한 명도 배정받지 못한 과목을 찾아 그 과목 이름과 학과 이름을 출력하는 SQL 문장을 작성하시오.
--- 과목 담당교수를 한 명도 배정받지 못한 과목이 무슨말??
-SELECT 
-	CLASS_NAME, DEPARTMENT_NAME
-FROM
+--SELECT 
+--	A.CLASS_NAME,
+--	B.DEPARTMENT_NAME
+--FROM
+--	TB_CLASS A,
+--	TB_DEPARTMENT B,
+--	TB_PROFESSOR C
+--WHERE 1 = 1
+--  AND A.DEPARTMENT_NO = B.DEPARTMENT_NO
+--  AND B.CATEGORY = '예체능';
+
+SELECT
+	A.CLASS_NAME,
+	C.DEPARTMENT_NAME 
+FROM 
 	TB_CLASS A,
-	TB_DEPARTMENT B
+	TB_CLASS_PROFESSOR B,
+	TB_DEPARTMENT C
 WHERE 1 = 1
-  AND A.DEPARTMENT_NO = B.DEPARTMENT_NO
-  AND B.CATEGORY LIKE '예체능';
+  AND A.CLASS_NO = B.CLASS_NO(+)
+  AND A.DEPARTMENT_NO = C.DEPARTMENT_NO
+  AND C.CATEGORY = '예체능'
+  AND B.PROFESSOR_NO IS NULL;
  
 -- 14. 춘 기술대학교 서반아어학과 학생들의 지도교수를 게시하고자 한다.
 --     학생이름과 지도교수 이름을 찾고 만일 지도 교수가 없는 학생일 경우 "지도교수 미지정"으로 표시하도록 하는 SQL 문을 작성하시오.
@@ -182,12 +196,64 @@ WHERE 1 = 1
 
  
 -- 15. 휴학생이 아닌 학생 중 평점이 4.0 이상인 학생을 찾아 그 학생의 학번, 이름, 학과 이름, 평점을 출력하는 SQL 문을 작성하시오.
+SELECT 
+	A.STUDENT_NO 학번,
+	A.STUDENT_NAME 이름,
+	B.DEPARTMENT_NAME "학과 이름",
+	AVG(C.POINT) 평점
+FROM 
+	TB_STUDENT A,
+	TB_DEPARTMENT B,
+	TB_GRADE C
+WHERE 1 = 1
+  AND A.DEPARTMENT_NO = B.DEPARTMENT_NO
+  AND A.STUDENT_NO = C.STUDENT_NO
+  AND A.ABSENCE_YN = 'N'
+GROUP BY
+	A.STUDENT_NO,
+	A.STUDENT_NAME,
+	B.DEPARTMENT_NAME
+HAVING 
+	AVG(C.POINT) >= 4.0
+ORDER BY 학번;
  
 -- 16. 환경조경학과 전공과목들의 과목 별 평점을 파악할 수 있는 SQL 문을 작성하시오.
  
 -- 17. 춘 기술대학교에 다니고 있는 최경희 학생과 같은 과 학생들의 이름과 주소를 출력하는 SQL 문을 작성하시오.
+SELECT 
+	A.STUDENT_NAME,
+	A.STUDENT_ADDRESS 
+FROM 
+	TB_STUDENT A,
+	TB_DEPARTMENT B
+WHERE 1 = 1
+  AND A.DEPARTMENT_NO = B.DEPARTMENT_NO
+  AND A.DEPARTMENT_NO = (SELECT W.DEPARTMENT_NO FROM TB_STUDENT W WHERE 1 = 1 AND W.STUDENT_NAME = '최경희');
  
 -- 18. 국어국문학과에서 총 평점이 가장 높은 학생의 이름과 학번을 표시하는 SQL 문을 작성하시오.
+SELECT
+	A.STUDENT_NO,
+	A.STUDENT_NAME,
+	ROWNUM
+FROM
+	(
+		SELECT 
+			A.STUDENT_NO,
+			A.STUDENT_NAME,
+			AVG(C.POINT) "평점"
+		FROM 
+			TB_STUDENT A,
+			TB_GRADE C
+		WHERE 1 = 1
+		  AND A.STUDENT_NO = C.STUDENT_NO
+		  AND A.DEPARTMENT_NO = '001'
+		GROUP BY 
+			A.STUDENT_NO,
+			A.STUDENT_NAME
+		ORDER BY 3 DESC
+	) A
+WHERE 1 = 1
+  AND ROWNUM = 1;
  
 -- 19. 춘 기술대학교의 "환경조경학과"가 속한 같은 계열 학과들의 학과 별 전공과목 평점을 파악하기 위한 적절한 SQL 문을 찾아내시오.
 --     단, 출력헤더는 "계열 학과명", "전공평점"으로 표시되도록 하고, 평점은 소수점 한 자리까지만 반올림하여 표시되도록 한다.
