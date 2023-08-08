@@ -153,15 +153,15 @@ WHERE 1 = 1
 -- 12. 2007 년도에 '인간관계론' 과목을 수강한 학생을 찾아 학생이름과 수강학기를 표시하는 SQL 문장을 작성하시오.
 SELECT 
 	A.STUDENT_NAME,
-	B.TERM_NO "TERM_NAME"
-FROM
+	B.TERM_NO "TERM_NAME" 
+FROM 
 	TB_STUDENT A,
 	TB_GRADE B,
 	TB_CLASS C
 WHERE 1 = 1
-  AND SUBSTR(TERM_NO, 1, 4) = '2007'
   AND A.STUDENT_NO = B.STUDENT_NO
-  AND B.CLASS_NO = C.CLASS_NO
+  AND B.CLASS_NO = C.CLASS_NO 
+  AND SUBSTR(B.TERM_NO, 1, 4) = '2007'
   AND C.CLASS_NO = 'C2604100'
 ORDER BY 1;
 
@@ -195,16 +195,14 @@ WHERE 1 = 1
 --     단, 출력헤더는 "학생이름", "지도교수"로 표시하며 고학번 학생이 먼저 표시되도록 한다.
 SELECT 
 	A.STUDENT_NAME 학생이름,
-	B.PROFESSOR_NAME 지도교수
+	NVL(B.PROFESSOR_NAME, '지도교수 미지정') 지도교수
 FROM 
 	TB_STUDENT A,
 	TB_PROFESSOR B
 WHERE 1 = 1
-  AND A.COACH_PROFESSOR_NO = B.PROFESSOR_NO
+  AND A.COACH_PROFESSOR_NO = B.PROFESSOR_NO(+)
   AND A.DEPARTMENT_NO = '020'
-ORDER BY ;
- 
-
+ORDER BY A.ENTRANCE_DATE;
  
 -- 15. 휴학생이 아닌 학생 중 평점이 4.0 이상인 학생을 찾아 그 학생의 학번, 이름, 학과 이름, 평점을 출력하는 SQL 문을 작성하시오.
 SELECT 
@@ -229,6 +227,10 @@ HAVING
 ORDER BY 학번;
  
 -- 16. 환경조경학과 전공과목들의 과목 별 평점을 파악할 수 있는 SQL 문을 작성하시오.
+SELECT 
+	A.CLASS_NO
+FROM 
+	TB_CLASS A
  
 -- 17. 춘 기술대학교에 다니고 있는 최경희 학생과 같은 과 학생들의 이름과 주소를 출력하는 SQL 문을 작성하시오.
 SELECT 
