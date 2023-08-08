@@ -1,12 +1,14 @@
 -- TCL(TRANSACTION CONTROL LANGUAGE) : 트랜잭션 제어 언어
 -- COMMIT(트랜잭션 종료 후 저장), ROLLBACK(트랜잭션 취소), SAVEPOINT(임시저장)
 
+-- COMMIT은 신중하게 사용!
+
 -- DML : 데이터 조작 언어로 데이터의 삽입, 수정, 삭제
 --> 트랜잭션은 DML과 관련되어 있음.
 
 
 /* TRANSACTION이란?
- - 데이터베이스의 논리적 연산 단위
+ - 개념 : 데이터베이스의 논리적 연산 단위
  
  - 데이터 변경 사항을 묶어 하나의 트랜잭션에 담아 처리함.
 
@@ -37,5 +39,86 @@
     ROLLBACK TO 포인트명1; -- 포인트1 지점 까지 데이터 변경사항 삭제
 
 */
+
+SELECT * FROM DEPARTMENT2;
+
+-- 새로운 데이터 INSERT 
+INSERT INTO DEPARTMENT2 VALUES('T1', '개발1팀', 'L2');
+INSERT INTO DEPARTMENT2 VALUES('T2', '개발2팀', 'L2');
+INSERT INTO DEPARTMENT2 VALUES('T3', '개발3팀', 'L2');
+--전체 실행 : 전체 드래그 후 Alt + X
+
+
+-- INSERT 확인
+SELECT * FROM DEPARTMENT2;
+--> DB에 반영된 것 처럼 보이지만
+-- SQL 수행 시 트랜잭션 내용도 포함해서 수행된다.
+-- (실제로 아직 DB에 반영 X)
+
+-- ROLLBACK 후 확인
+ROLLBACK;
+SELECT * FROM DEPARTMENT2;
+
+
+-- COMMIT 후 ROLLBACK이 되는지 확인
+INSERT INTO DEPARTMENT2 VALUES('T1', '개발1팀', 'L2');
+INSERT INTO DEPARTMENT2 VALUES('T2', '개발2팀', 'L2');
+INSERT INTO DEPARTMENT2 VALUES('T3', '개발3팀', 'L2');
+
+COMMIT;
+
+SELECT * FROM DEPARTMENT2;
+
+ROLLBACK;
+
+SELECT * FROM DEPARTMENT2; --> 롤백 안됨!
+
+-----------------------------------------------------------------------------
+
+-- SAVEPOINT 확인
+INSERT INTO DEPARTMENT2 VALUES('T4', '개발4팀', 'L2');
+SAVEPOINT SP1;
+
+SELECT * FROM DEPARTMENT2;
+
+INSERT INTO DEPARTMENT2 VALUES('T5', '개발5팀', 'L2');
+SAVEPOINT SP2;
+
+INSERT INTO DEPARTMENT2 VALUES('T6', '개발6팀', 'L2');
+SAVEPOINT SP3;
+
+
+
+ROLLBACK TO SP1;
+
+
+SELECT * FROM DEPARTMENT2;
+
+
+DELETE FROM DEPARTMENT2
+WHERE DEPT_ID LIKE 'T%';
+
+SELECT * FROM DEPARTMENT2;
+
+-- SP2 지점까지 롤백
+ROLLBACK TO SP2;
+
+SELECT * FROM DEPARTMENT2;
+
+-- SP1 지점까지 롤백
+ROLLBACK TO SP1;
+SELECT * FROM DEPARTMENT2;
+
+ROLLBACK;
+SELECT *  FROM DEPARTMENT2;
+
+
+
+
+
+
+
+
+
 
 
