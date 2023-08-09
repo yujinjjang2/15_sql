@@ -603,29 +603,75 @@ FROM EMPLOYEE MAIN;
 -----------------------------------------------------------------------
 
 
--- 7. 인라인 뷰(INLINE-VIEW)
---    FROM 절에서 서브쿼리를 사용하는 경우로
+-- 7. 인라인 뷰(INLINE-VIEW) -- VIEW : 조회한 것만 모아둔 가상테이블
+--    'FROM 절'에서 서브쿼리를 사용하는 경우로
 --    서브쿼리가 만든 결과의 집합(RESULT SET)을 테이블 대신에 사용한다.
+
+
+SELECT *
+FROM (
+		SELECT EMP_NAME 이름, DEPT_TITLE 부서
+		FROM EMPLOYEE
+		JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)
+		)
+WHERE 부서 = '기술지원부';
+-- WHERE DEPT_TITLE = '기술지원부'; -> 실행시 오류
 
 
 -- 인라인뷰를 활용한 TOP-N분석
 -- 전 직원 중 급여가 높은 상위 5명의
 -- 순위, 이름, 급여 조회
+SELECT ROWNUM, EMP_NAME, SALARY
+FROM EMPLOYEE
+--WHERE ROWNUM <= 5
+ORDER BY SALARY DESC;
+
+-- ROWNUM 컬럼 : 행번호를 나타내는 가상 컬럼
+-- SELECT, WHERE, ORDER BY 사용 가능
+
+--> 인라인뷰를 이용해서 해결 가능!
+
+-- 1) 이름, 급여를 급여 내림차순으로 조회한 결과를 인라인뷰로 사용
+--> FROM 절에 작성되기 때문에 해석순위 1순위
+
+-- 2) 메인쿼리 조회 시 ROWNUM을 5 이하까지만 조회
+
+SELECT ROWNUM, EMP_NAME, SALARY
+FROM (SELECT EMP_NAME, SALARY
+		FROM EMPLOYEE
+		ORDER BY SALARY DESC)
+WHERE ROWNUM <= 5;
 
 
 
 -- 급여 평균이 3위 안에 드는 부서의 부서코드와 부서명, 평균급여를 조회
+
+SELECT DEPT_CODE, DEPT_TITLE, 평균급여
+FROM (
+		SELECT DEPT_CODE, DEPT_TITLE, CEIL(AVG(SALARY)) 평균급여
+		FROM EMPLOYEE
+		LEFT JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID)
+		GROUP BY DEPT_CODE, DEPT_TITLE
+		ORDER BY 평균급여 DESC)
+WHERE ROWNUM <= 3;
+
 
 ------------------------------------------------------------------------
 
 -- 8. WITH
 --    서브쿼리에 이름을 붙여주고 사용시 이름을 사용하게 함
 --    인라인뷰로 사용될 서브쿼리에 주로 사용됨
---    실행 속도도 빨라진다는 장점이 있다. 
+--    실행 속도도 빨라진다는 장점이 있다.
 
 -- 
 -- 전 직원의 급여 순위 
 -- 순위, 이름, 급여 조회
+WITH TOP_SAL AS ( SELECT EMP_NAME, SALARY
+					FROM EMPLOYEE
+					ORDER BY SALARY DESC)					
+SELECT ROWNUM, EMP_NAME, SALARY
+FROM TOP_SAL
+WHERE ROWNUM <= 10;
 
 
 --------------------------------------------------------------------------
@@ -638,12 +684,32 @@ FROM EMPLOYEE MAIN;
 
 -- 사원별 급여 순위
 -- 1) ROWNUM
+SELECT ROWNUM, EMP_NAME, SALARY
+FROM (SELECT EMP_NAME, SALARY
+		FROM EMPLOYEE
+		ORDER BY SALARY DESC);
 
 -- 2) RANK() OVER(정렬순서)
+
+SELECT RANK() OVER(ORDER BY SALARY DESC) 순위,
+		EMP_NAME, SALARY
+		FROM EMPLOYEE;
+	
+--19   전형돈	2000000
+--19   윤은해	2000000
+--21   박나라	1800000
+	
 
 -- DENSE_RANK() OVER : 동일한 순위 이후의 등수를 이후의 순위로 계산
 --                     EX) 공동 1위가 2명이어도 다음 순위는 2위
 
+SELECT DENSE_RANK() OVER(ORDER BY SALARY DESC) 순위,
+		EMP_NAME, SALARY
+		FROM EMPLOYEE;
+	
+--19	전형돈	2000000
+--19	윤은해	2000000
+--20	박나라	1800000	
 
 
 
