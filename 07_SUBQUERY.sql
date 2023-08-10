@@ -19,6 +19,7 @@ WHERE EMP_NAME = '노옹철'; -- 'D9'
 -- 2) 부서코드가 D9인 직원을 조회
 SELECT EMP_NAME, DEPT_CODE
 FROM EMPLOYEE
+
 WHERE DEPT_CODE = 'D9';
 
 
@@ -61,7 +62,7 @@ WHERE SALARY >= (SELECT CEIL(AVG(SALARY))
     
     - 다중행 (단일열) 서브쿼리 : 서브쿼리의 조회 결과 값의 개수가 '여러개'일 때
     
-    - 다중열 서브쿼리 : 서브쿼리의 SELECT 절에 나열된 항목수가 여러개 일 때
+    - 다중열 서브쿼리 : 서브쿼리의 SELECT 절에 자열된 항목수가 여러개 일 때
     
     - 다중행 다중열 서브쿼리 : 조회 결과 행 수와 열 수가 여러개일 때 
     
@@ -134,7 +135,6 @@ WHERE SALARY > (SELECT SALARY FROM EMPLOYEE
 SELECT MAX(SUM(SALARY))
 FROM EMPLOYEE
 GROUP BY DEPT_CODE;
-
 
 -- 2) 부서별 급여합이 17700000인 부서의 부서명과 급여 합 조회
 SELECT DEPT_TITLE, SUM(SALARY)
@@ -278,18 +278,6 @@ FROM EMPLOYEE
 JOIN JOB USING(JOB_CODE)
 WHERE JOB_NAME = '대리';
 
-SELECT 
-	A.EMP_ID,
-	A.EMP_NAME,
-	B.JOB_NAME,
-	A.SALARY 
-FROM 
-	EMPLOYEE A,
-	JOB B
-WHERE 1 = 1
-  AND A.JOB_CODE = B.JOB_CODE
-  AND B.JOB_NAME = '대리'
-
 -- 2) 직급이 과장인 직원들 급여 조회
 SELECT SALARY
 FROM EMPLOYEE
@@ -321,16 +309,6 @@ AND SALARY > ANY (SELECT SALARY
 
 -- 차장 직급의 급여의 가장 큰 값보다 많이 받는 과장 직급의 직원
 -- 사번, 이름, 직급, 급여를 조회하세요
-SELECT EMP_ID, EMP_NAME, DEPT_CODE, SALARY
-FROM EMPLOYEE
-JOIN JOB USING (JOB_CODE)
-WHERE JOB_NAME = '과장' 
-  AND SALARY > (SELECT MAX(SALARY)
-				FROM EMPLOYEE
-				JOIN JOB USING (JOB_CODE)
-				WHERE JOB_NAME = '차장');
-
-
 -- 단, > ALL 혹은 < ALL 연산자를 사용하세요
 
 -- > ALL, < ALL : 여러개의 결과값의 모든 값보다 큰 / 작은 경우
@@ -445,14 +423,7 @@ WHERE (DEPT_CODE, JOB_CODE) = (SELECT DEPT_CODE, JOB_CODE
 -------------------------- 연습문제 -------------------------------
 -- 1. 노옹철 사원과 같은 부서, 같은 직급인 사원을 조회하시오. (단, 노옹철 사원은 제외)
 --    사번, 이름, 부서코드, 직급코드, 부서명, 직급명
-SELECT EMP_ID, EMP_NAME, DEPT_CODE, JOB_CODE, DEPT_TITLE, JOB_NAME
-FROM EMPLOYEE
-JOIN JOB USING(JOB_CODE)
-LEFT JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID)
-WHERE (DEPT_CODE, JOB_CODE) = (SELECT DEPT_CODE, JOB_CODE
-								FROM EMPLOYEE
-								WHERE EMP_NAME = '노옹철')
-AND EMP_NAME <> '노옹철';
+							
 -- 노옹철 제외 어떻게?
 --SELECT EMP_ID, EMP_NAME, DEPT_CODE, JOB_CODE, DEPT_TITLE, JOB_NAME
 --FROM EMPLOYEE
@@ -474,11 +445,6 @@ AND EMP_NAME != '노옹철';
 
 -- 2. 2000년도에 입사한 사원의 부서와 직급이 같은 사원을 조회하시오
 --    사번, 이름, 부서코드, 직급코드, 고용일
-SELECT EMP_ID, EMP_NAME, DEPT_CODE, JOB_CODE, HIRE_DATE
-FROM EMPLOYEE
-WHERE (DEPT_CODE, JOB_CODE) = (SELECT DEPT_CODE, JOB_CODE
-								FROM EMPLOYEE
-								WHERE EXTRACT(YEAR FROM HIRE_DATE) = '2000');
 							
 --SELECT EMP_ID, EMP_NAME, DEPT_CODE, JOB_CODE, HIRE_DATE
 --FROM EMPLOYEE
@@ -494,14 +460,7 @@ WHERE (DEPT_CODE, JOB_CODE) = (SELECT DEPT_CODE, JOB_CODE
 
 
 -- 3. 77년생 여자 사원과 동일한 부서이면서 동일한 사수를 가지고 있는 사원을 조회하시오
---    사번, 이름, 부서코드, 사수번호, 주민번호, 고용일  
-SELECT EMP_ID, EMP_NAME, DEPT_CODE, MANAGER_ID, EMP_NO, HIRE_DATE
-FROM EMPLOYEE
-WHERE (DEPT_CODE, MANAGER_ID) = (SELECT DEPT_CODE, MANAGER_ID
-									FROM EMPLOYEE
-									WHERE SUBSTR(EMP_NO, 1, 2) = '77'
-									  AND SUBSTR(EMP_NO, 8, 1) = '2');		
-									 
+--    사번, 이름, 부서코드, 사수번호, 주민번호, 고용일    
 --SELECT EMP_ID, EMP_NAME, DEPT_CODE, MANAGER_ID, EMP_NO, HIRE_DATE
 --FROM EMPLOYEE
 --WHERE (DEPT_CODE, MANAGER_ID) IN (SELECT DEPT_CODE, MANAGER_ID
@@ -534,13 +493,12 @@ WHERE SALARY IN (2000000, 6000000);
 
 
 -- 2) 직급별 평균 급여
-SELECT JOB_CODE, AVG(SALARY), TRUNC(AVG(SALARY), -4)
+SELECT JOB_CODE, TRUNC(AVG(SALARY), -4)
 FROM EMPLOYEE
 GROUP BY JOB_CODE;
 
 
 -- 3) 본인 직급의 평균 급여를 받고 있는 직원
---    직급별 평균연봉을 정확하게 받고 있는 직원!
 SELECT EMP_ID, EMP_NAME, JOB_CODE, SALARY
 FROM EMPLOYEE
 WHERE (JOB_CODE, SALARY) IN (SELECT JOB_CODE, TRUNC(AVG(SALARY), -4)
@@ -593,7 +551,7 @@ J6	2624373
 -- 부서별 입사일이 가장 빠른 사원의
 --    사번, 이름, 부서명(NULL이면 '소속없음'), 직급명, 입사일을 조회하고
 --    입사일이 빠른 순으로 조회하세요
---    단, 퇴사한 직원은 제외하고 조회하세요			
+--    단, 퇴사한 직원은 제외하고 조회하세요
 SELECT EMP_ID, EMP_NAME, DEPT_CODE, NVL(DEPT_TITLE, '소속없음'), JOB_NAME, HIRE_DATE
 FROM EMPLOYEE MAIN
 JOIN JOB USING(JOB_CODE)
