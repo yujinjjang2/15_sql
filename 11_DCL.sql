@@ -60,7 +60,6 @@ ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 -- CREATE USER 사용자명 IDENTIFIED BY 비밀번호;
 CREATE USER lyj_sample IDENTIFIED BY 1234;
 
-
 -- 2. 새 연결(접속방법) 추가
 --> LYJ_SAMPLE는 CREATE SESSION 권한을 가지고있지 않음; 로그온이 거절되었습니다
 --> 접속 권한
