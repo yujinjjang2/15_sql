@@ -501,28 +501,6 @@ WHERE SALARY >= 3000000;
 
 --SELECT SUM(CASE WHEN SALARY >= 3000000 THEN '1' END)
 --FROM EMPLOYEE;
-<<<<<<< HEAD
-=======
-
-
--- 몇년 몇월몇일 단 몇년은 네자리숫자
---SELECT 
---	TO_CHAR(TO_DATE(SUBSTR('980903-2860519', 1, 6), 'RRMMDD'), 'YYYY"년" MM"월" DD"일"')
---FROM 
---	DUAL;
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> a1542b04005d286d049340c2bd365ede3d4f866a
 
 
 -- 몇년 몇월몇일 단 몇년은 네자리숫자
