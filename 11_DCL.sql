@@ -58,7 +58,7 @@ ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 
 -- [작성법]
 -- CREATE USER 사용자명 IDENTIFIED BY 비밀번호;
-CREATE USER lyj_sample IDENTIFIED BY 1234;
+CREATE USER lyj_test IDENTIFIED BY 1234;
 
 -- 2. 새 연결(접속방법) 추가
 --> LYJ_SAMPLE는 CREATE SESSION 권한을 가지고있지 않음; 로그온이 거절되었습니다
@@ -69,7 +69,7 @@ CREATE USER lyj_sample IDENTIFIED BY 1234;
 
 -- [권한 부여 작성법]
 -- GRANT 권한, 권한, ... TO 사용자명;
-GRANT CREATE SESSION TO lyj_sample;
+GRANT CREATE SESSION TO lyj_test;
 
 
 
@@ -85,9 +85,9 @@ CREATE TABLE TB_TEST(
 -- + 데이터를 저장할 수 있는 공간(TABLESPACE) 할당
 
 -- 6. (SYS)테이블 생성 권한 + TABLESPACE 할당
-GRANT CREATE TABLE TO lyj_sample;
+GRANT CREATE TABLE TO lyj_test;
 
-ALTER USER lyj_sample DEFAULT TABLESPACE
+ALTER USER lyj_test DEFAULT TABLESPACE
 SYSTEM QUOTA UNLIMITED ON SYSTEM;
 
 -- 7. (sample)다시 테이블 생성
@@ -95,6 +95,8 @@ CREATE TABLE TB_TEST(
 	PK_COL NUMBER PRIMARY KEY,
 	CONTENT VARCHAR2(100)
 );
+
+SELECT * FROM TB_TEST;
 
 
 -----------------------------------------------------------------
@@ -104,7 +106,7 @@ CREATE TABLE TB_TEST(
 --> 해당 계정은 지정된 권한을 이용해서 특정 역할을 갖게된다.
 
 -- (SYS) sample 계정에 CONNECT, RESOURCE 부여
-GRANT CONNECT, RESOURCE TO lyj_sample;
+GRANT CONNECT, RESOURCE TO lyj_test;
 
 -- CONNECT : DB 접속 관련 권한을 묶어둔 ROLE
 -- RESOURCE : DB 사용을 위한 기본 객체 생성 권한을 묶어둔 ROLE
@@ -127,7 +129,7 @@ SELECT * FROM kh.EMPLOYEE;
 
 -- [객체 권한 부여 방법]
 -- GRANT 객체권한 ON 객체명 'TO' 사용자명;
-GRANT SELECT ON EMPLOYEE TO lyj_sample;
+GRANT SELECT ON EMPLOYEE TO lyj_test;
 
 
 -- 3. (sample) 다시 kh.EMPLOYEE 조회
@@ -136,7 +138,7 @@ SELECT * FROM kh.EMPLOYEE;
 -- 4. (kh) sample 계정 부여한 EMPLOYEE 테이블 조회 권한 회수(REVOKE)
 --[권한 회수 작성법]
 -- REVOKE 객체권한 ON 객체명 'FROM' 사용자명;
-REVOKE SELECT ON EMPLOYEE FROM lyj_sample;
+REVOKE SELECT ON EMPLOYEE FROM lyj_test;
 
 -- 5. (sample) 다시 kh.EMPLOYEE 조회
 SELECT * FROM kh.EMPLOYEE;
