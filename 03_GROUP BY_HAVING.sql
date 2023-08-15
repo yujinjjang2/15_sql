@@ -54,6 +54,10 @@ FROM EMPLOYEE
 GROUP BY DECODE ( SUBSTR(EMP_NO, 8, 1), '1', '남', '2', '여' ) -- 별칭 사용 X (SELECT절 해석 x)
 ORDER BY "인원 수"; -- 별칭 사용 O (SELECT절 해석 완료)
 
+SELECT EMP_ID, EMP_NAME, DECODE ( SUBSTR(EMP_NO, 8, 1), '1', '남', '2', '여' )
+FROM EMPLOYEE
+
+
 --SELECT
 --    A.성별
 --	, COUNT(*) "인원 수"
@@ -96,6 +100,17 @@ GROUP BY DEPT_CODE;
 
 -- EMPLOYEE 테이블에서 직급별 2000년도 이후(2000년 포함) 입사자들의 급여합을 조회
 -- (직급코드 오름차순)
+--SELECT 
+--	JOB_CODE, SUM(SALARY), COUNT(*)
+--FROM 
+--	EMPLOYEE
+--WHERE 
+--	EXTRACT(YEAR FROM HIRE_DATE) >= '2000'
+--GROUP BY
+--	JOB_CODE
+--HAVING 
+--	COUNT(*) >= 4
+
 
 SELECT JOB_CODE, SUM(SALARY)
 FROM EMPLOYEE
@@ -156,6 +171,18 @@ ORDER BY DEPT_CODE;
 
 
 -- EMPLOYEE 테이블에서 직급별 인원수가 5명 이하인 직급코드, 인원수 조회(직급코드 오름차순)
+--SELECT 
+--	JOB_CODE, COUNT(*)
+--FROM 
+--	EMPLOYEE
+--GROUP BY
+--	JOB_CODE 
+--HAVING 
+--	COUNT(*) <= 5
+--ORDER BY 
+--	1;
+
+
 SELECT JOB_CODE, COUNT(*)
 FROM EMPLOYEE
 GROUP BY JOB_CODE

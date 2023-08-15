@@ -297,6 +297,8 @@ SELECT '1,000,000' + 500000 FROM DUAL;
 
 SELECT TO_NUMBER('1,000,000', '9,999,999') + 500000 FROM DUAL; -- 1,500,000
 
+--SELECT REPLACE('1,000,000', ',', '') FROM DUAL;
+
 -- SQL Error [1722] [42000]: ORA-01722: 수치가 부적합합니다
 
 
@@ -389,7 +391,6 @@ FROM EMPLOYEE;
 -- 급여가 500만원 이상이면 '대'
 -- 급여가 300만 이상 500만 미만이면 '중'
 -- 급여가 300만 미만 '소' 으로 조회
-
 SELECT 
 	EMP_NAME
 	, SALARY
