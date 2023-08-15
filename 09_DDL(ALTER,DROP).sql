@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> a1542b04005d286d049340c2bd365ede3d4f866a
 -- DDL(Data Definition Language)
 -- 객체를 만들고(CREATE), 바꾸고(ALTER), 삭제(DROP)하는 데이터 정의 언어
 
@@ -37,13 +42,20 @@ AS SELECT * FROM DEPARTMENT;
 
 SELECT * FROM DEPT_COPY;
 
+<<<<<<< HEAD
+
+=======
 --INSERT INTO DEPT_COPY VALUES('D1', '총무부1', 'L1');
+>>>>>>> a1542b04005d286d049340c2bd365ede3d4f866a
 -- DEPT_COPY의 DEPT_TITLE 컬럼에 UNIQUE 추가
 
 ALTER TABLE DEPT_COPY 
 ADD CONSTRAINT DEPT_COPY_TITLE_U UNIQUE(DEPT_TITLE);
 
+<<<<<<< HEAD
+=======
 --INSERT INTO DEPT_COPY VALUES('D1', '총무부', 'L1');
+>>>>>>> a1542b04005d286d049340c2bd365ede3d4f866a
 
 -- DEPT_COPY의 DEPT_TITLE 컬럼에 UNIQUE 삭제
 ALTER TABLE DEPT_COPY 
@@ -112,10 +124,18 @@ SELECT * FROM DEPT_COPY;
 
 -- D10 개발1팀 추가
 INSERT INTO DEPT_COPY
+<<<<<<< HEAD
+VALUES('D10', '개발1팀', 'L1', DEFAULT, DEFAULT);
+-- ORA-12899: "KH"."DEPT_COPY"."DEPT_ID" 열에 대한 값이 너무 큼(실제: 3, 최대값: 2)
+
+
+
+=======
 VALUES('D10', '개발2팀', 'L1', DEFAULT, DEFAULT);
 -- ORA-12899: "KH"."DEPT_COPY"."DEPT_ID" 열에 대한 값이 너무 큼(실제: 3, 최대값: 2)
 
 
+>>>>>>> a1542b04005d286d049340c2bd365ede3d4f866a
 -- DEPT_ID 컬럼 수정
 ALTER TABLE DEPT_COPY MODIFY DEPT_ID VARCHAR2(5);
 --> 다시 위 INSERT 실행 --> 성공!
@@ -162,6 +182,10 @@ AS SELECT * FROM DEPARTMENT;
 -- DEPT_COPY 테이블에 PK 추가 (컬럼 : DEPT_ID, 제약조건명 : D_COPY_PK)
 ALTER TABLE DEPT_COPY ADD CONSTRAINT D_COPY_PK PRIMARY KEY(DEPT_ID);
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> a1542b04005d286d049340c2bd365ede3d4f866a
 -- 3. 이름변경(컬럼, 제약조건, 테이블)
 
 -- 1) 컬럼명 변경 (DEPT_TITLE -> DEPT_NAME)
@@ -214,8 +238,11 @@ INSERT INTO TB2 VALUES(11, 1);
 INSERT INTO TB2 VALUES(22, 2);
 INSERT INTO TB2 VALUES(33, 3);
 
+<<<<<<< HEAD
+=======
 --DROP TABLE TB2;
 
+>>>>>>> a1542b04005d286d049340c2bd365ede3d4f866a
 -- TB1 삭제
 DROP TABLE TB1;
 -- ORA-02449: 외래 키에 의해 참조되는 고유/기본 키가 테이블에 있습니다
@@ -254,4 +281,22 @@ ALTER TABLE TB2 RENAME COLUMN TB2_COL TO TB2_COLUMN;
 
 
 ROLLBACK;
+<<<<<<< HEAD
+SELECT * FROM TB2; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
 SELECT * FROM TB2;
+>>>>>>> a1542b04005d286d049340c2bd365ede3d4f866a

@@ -347,6 +347,7 @@ FROM EMPLOYEE;
 -- 직급 코드가 J5인 직원은 10% 인상,
 -- 그 외 직급은 5% 인상
 
+
 -- 내 풀이
 SELECT EMP_NAME, JOB_CODE, SALARY,
 	DECODE(JOB_CODE, 'J7', SALARY+(SALARY * 0.2), 'J6', SALARY+(SALARY * 0.15), 'J5', SALARY+(SALARY * 0.1), SALARY+(SALARY * 0.05)) 인상급여
@@ -508,17 +509,3 @@ WHERE SALARY >= 3000000;
 --	TO_CHAR(TO_DATE(SUBSTR('980903-2860519', 1, 6), 'RRMMDD'), 'YYYY"년" MM"월" DD"일"')
 --FROM 
 --	DUAL;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
