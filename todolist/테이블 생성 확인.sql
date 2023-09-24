@@ -1,0 +1,3 @@
+-- 테이블 생성 확인
+SELECT * FROM MEMBER;
+SELECT * FROM TODO;
