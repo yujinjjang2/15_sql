@@ -1,5 +1,13 @@
 ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
+
+-- 유저 삭제
+DROP USER todolist CASCADE;
+
+-- 최초 사용자 비밀번호 생성
 CREATE USER todolist IDENTIFIED BY todolist;
+
+-- 비밀번호 변경 시 아래 구문 사용
+ALTER USER todoList IDENTIFIED BY todoList1234;
 
 GRANT RESOURCE, CONNECT TO todolist;
 
