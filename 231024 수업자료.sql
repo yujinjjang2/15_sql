@@ -108,6 +108,26 @@ ORDER SIBLINGS BY COMMENT_NO
 
 
 
+--------------------- 과제 ---------------------
+
+SELECT * FROM "COMMENT";
+
+-- 댓글 목록 조회
+SELECT COMMENT_NO, COMMENT_CONTENT, TO_CHAR(C_CREATE_DATE, 'YYYY-MM-DD') C_CREATE_DATE, COMMENT_DEL_FL, BOARD_NO, MEMBER_NO, PARENT_NO
+FROM "COMMENT"
+WHERE BOARD_NO = ;
+
+-- 댓글 삽입
+INSERT INTO "COMMENT" VALUES(SEQ_COMMENT_NO.NEXTVAL, #{commentContent}, DEFAULT, DEFAULT, #{boardNo}, #{memberNo})
+
+
+
+
+
+
+
+
+
 
 
 
