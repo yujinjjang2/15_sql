@@ -245,3 +245,5 @@ OR C.PLACE_INFO LIKE '%전쟁%');
 
 
 
+
+
