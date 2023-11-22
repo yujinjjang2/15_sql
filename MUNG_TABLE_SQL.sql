@@ -330,4 +330,10 @@ WHERE MEMBER_NAME = '유저일'
 AND MEMBER_EMAIL = 'o3odw98@gmail.com'
 AND MEMBER_DEL_YN = 'N';
 
+-- 아이디 중복검사
+SELECT COUNT(*)
+FROM "MEMBER"
+WHERE MEMBER_ID = 'user01'
+AND MEMBER_DEL_YN = 'N';
+
 
