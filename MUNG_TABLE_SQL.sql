@@ -375,4 +375,27 @@ UPDATE "MEMBER" SET
 MEMBER_DEL_YN = 'Y'
 WHERE MEMBER_NO = 1;
 
-SELECT * FROM MEMBER;
+-- 탈퇴하지 않은 회원 리스트 수 조회
+SELECT COUNT(*) FROM "MEMBER"
+WHERE MEMBER_DEL_YN = 'N';
+
+-- (회원) 정보수정
+UPDATE "MEMBER" SET 
+MEMBER_PW = 'pass03',
+MEMBER_TEL = '01011112222',
+MEMBER_EMAIL = 'user03@kh.or.kr',
+MEMBER_NICKNAME = '유쩌삼',
+MEMBER_ADDRESS = '11111^^^서울시 숭인로 11길^^^1층'
+WHERE MEMBER_NO = 2;
+
+
+
+
+
+
+
+
+
+
+
+
