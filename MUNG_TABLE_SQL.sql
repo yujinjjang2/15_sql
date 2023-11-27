@@ -388,7 +388,17 @@ MEMBER_NICKNAME = '유쩌삼',
 MEMBER_ADDRESS = '11111^^^서울시 숭인로 11길^^^1층'
 WHERE MEMBER_NO = 2;
 
+-- 회원 샘플 데이터 삽입(페이지네이션 테스트용)
+BEGIN
+	FOR I IN 1..2000 
+	LOOP
+		INSERT INTO MEMBER 
+	VALUES(SEQ_MEMBER_NO.NEXTVAL, 'userTest'||SEQ_MEMBER_NO.CURRVAL, 'passTest'||SEQ_MEMBER_NO.CURRVAL, 'user02@kh.or.kr', '유저이', '010-1111-3333', '유쩌이', 
+			'88888^^^서울시 숭인로 11길^^^3층', NULL, DEFAULT, DEFAULT, DEFAULT, NULL, NULL);
+	END LOOP;
+END;
 
+COMMIT;
 
 
 
