@@ -433,6 +433,9 @@ SELECT COUNT(*) FROM "EMAIL_CHECK"
 WHERE CHECK_EMAIL = #{email}
 AND CHECK_KEY = #{inputKey}
 
+-- 활동일지 등록하기
+INSERT INTO ACTIVITY_LOG VALUES(SEQ_ACTIVITY_NO, #{memberNo}, #{rename}, #{activityContent}, DEFAULT);
+
 
 
 
