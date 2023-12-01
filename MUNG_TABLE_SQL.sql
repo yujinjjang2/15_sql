@@ -436,7 +436,7 @@ AND CHECK_KEY = #{inputKey}
 -- 활동일지 등록하기
 INSERT INTO ACTIVITY_LOG VALUES(SEQ_ACTIVITY_NO, #{memberNo}, #{rename}, #{activityContent}, DEFAULT);
 
-
+INSERT INTO ACTIVITY_LOG VALUES(SEQ_ACTIVITY_NO.NEXTVAL, 1, '/dog1', '친구 강아지들과 즐겁게 산책했어요!', DEFAULT);
 
 
 
