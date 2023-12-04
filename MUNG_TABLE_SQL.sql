@@ -334,6 +334,19 @@ FROM "MEMBER"
 WHERE MEMBER_DEL_YN = 'N'
 AND MEMBER_ID = 'user01';
 
+-- 회원가입
+INSERT INTO "MEMBER"
+VALUES(SEQ_MEMBER_NO.NEXTVAL
+, #{memberId}
+, #{memberPw}
+, #{memberEmail}
+, #{memberName}
+, #{memberTel}
+, #{memberNickname}
+, #{memberAddress}
+, #{memberProfile}
+, DEFAULT, DEFAULT, DEFAULT, NULL, NULL)
+
 -- 아이디찾기
 SELECT MEMBER_ID
 FROM "MEMBER"
